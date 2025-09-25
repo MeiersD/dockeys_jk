@@ -311,7 +311,10 @@ function handleMutlipleMotion(key) {
     mode = multipleMotion.mode
 }
 
-
+// Thanks chatgpt <3
+let lastKey = null;
+let lastKeyTime = 0;
+const sequenceTimeout = 500;
 
 function eventHandler(e) {
     if (
@@ -329,6 +332,32 @@ function eventHandler(e) {
         return;
     }
     if (e.altKey || e.ctrlKey || e.metaKey) return;
+
+    // --- jk escape sequence ---
+    if (e.key === 'j') {
+        if (mode == 'insert') {
+            lastKey = 'j';
+            lastKeyTime = Date.now();
+            return;
+        }
+    }
+
+    if (e.key === 'k' && lastKey === 'j' && Date.now() - lastKeyTime < sequenceTimeout) {
+        e.preventDefault();
+        lastKey = null;
+        //Delete the last character typed
+        // insert code:
+        sendKeyEvent("backspace");
+
+        if (mode === 'visualLine' || mode === 'visual') {
+            sendKeyEvent("right");
+        }
+        switchModeToNormal();
+        return;
+    }
+    lastKey = null; // reset on any other key
+    // --------------------------
+
     if (e.key == 'Escape') {
         e.preventDefault()
         if (mode == 'visualLine' || mode == 'visual') {
