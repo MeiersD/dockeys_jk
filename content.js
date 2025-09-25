@@ -357,8 +357,18 @@ function eventHandler(e) {
     }
     lastKey = null; // reset on any other key
     // --------------------------
-
+    // ------also fix v----------
+    if (e.key == 'v') {
+        if (mode == 'visualLine' || mode == 'visual') {
+            e.preventDefault();
+            sendKeyEvent("right")
+            switchModeToNormal()
+            return;
+        }
+    }
+    //---------------------------
     if (e.key == 'Escape') {
+    //if (e.key == 'Escape' || e.key == 'v') {
         e.preventDefault()
         if (mode == 'visualLine' || mode == 'visual') {
             sendKeyEvent("right")
