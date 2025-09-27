@@ -333,6 +333,31 @@ function eventHandler(e) {
     }
     if (e.altKey || e.ctrlKey || e.metaKey) return;
 
+
+    // --- space end line ---
+    if (e.key === ' '){
+        if (mode == 'normal') {
+            e.preventDefault();
+            goToEndOfLine()
+            return;
+        }
+    }
+    // --- aa newline----
+    if (e.key === 'a' && lastKey === 'a' && Date.now() - lastKeyTime < sequenceTimeout){
+        if (mode == 'normal') {
+            e.preventDefault();
+            goToStartOfLine()
+            return;
+        }
+    }
+    else if (e.key === 'a') {
+        if (mode == 'normal') {
+            e.preventDefault();
+            lastKey = 'a';
+            lastKeyTime = Date.now();
+            return;
+        }
+    }
     // --- jk escape sequence ---
     if (e.key === 'j') {
         if (mode == 'insert') {
